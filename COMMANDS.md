@@ -239,13 +239,13 @@ flutter run
 ### Inspeccionar datos
 ```bash
 # Ubicación de datos en Android
-adb shell "ls -la /data/data/com.example.piscina_todo_app/app_flutter/"
+adb shell "ls -la /data/data/com.example.piscinapp/app_flutter/"
 
 # Descargar base de datos
-adb pull /data/data/com.example.piscina_todo_app/app_flutter/ ./hive_backup/
+adb pull /data/data/com.example.piscinapp/app_flutter/ ./hive_backup/
 
 # Limpiar datos de la app (resetear)
-adb shell pm clear com.example.piscina_todo_app
+adb shell pm clear com.example.piscinapp
 ```
 
 ---

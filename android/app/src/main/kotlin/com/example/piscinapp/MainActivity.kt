@@ -1,4 +1,4 @@
-package com.example.piscina_todo_app
+package com.example.piscinapp
 
 import io.flutter.embedding.android.FlutterActivity
 

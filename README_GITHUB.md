@@ -49,7 +49,7 @@
 1. **Clonar el repositorio**
 ```bash
 git clone <tu-repo>
-cd piscina_todo_app
+cd piscinapp
 ```
 
 2. **Instalar dependencias**
