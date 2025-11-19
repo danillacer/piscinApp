@@ -65,6 +65,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Piscinapp'),
         centerTitle: true,
+        automaticallyImplyLeading: false, // Sin botón de volver atrás
       ),
       body: SafeArea(
         child: SingleChildScrollView(
