@@ -134,6 +134,9 @@ docs/LISTA_SCREENSHOTS.md
 # Scripts de desarrollo local
 /scripts/
 
+# GitHub workflows (no CI/CD)
+.github/
+
 # Export files
 /exports/
 *.csv
