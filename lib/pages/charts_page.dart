@@ -1,3 +1,14 @@
+/// 📊 Página de Estadísticas y Gráficas
+///
+/// Muestra visualizaciones de datos usando fl_chart:
+/// - 📊 Gráfica de barras: Piscinas por sesión (cada barra = 1 sesión)
+/// - 📈 Gráfica de línea: Progreso acumulado en el tiempo
+/// - 🔥 Tarjeta de racha actual y mejor racha
+/// - 🎯 Tarjeta de objetivo semanal con progreso
+/// - 📝 Resumen con totales: sesiones, piscinas, metros, promedio
+///
+/// Usa SingleChildScrollView para mostrar todo el contenido.
+/// Si no hay sesiones, muestra un estado vacío con mensaje.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -52,6 +63,7 @@ class ChartsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // 📊 Gráfica de barras: Piscinas por sesión
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -77,6 +89,7 @@ class ChartsPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // 📈 Gráfica de línea: Progreso acumulado (suma creciente)
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -242,6 +255,12 @@ class ChartsPage extends StatelessWidget {
   }
 }
 
+// 📊 Widget de gráfica de barras (fl_chart)
+/// Cada barra representa una sesión con su número de piscinas
+/// - Tooltip muestra: fecha, piscinas, metros
+/// - Eje X: fechas en formato dd/MM
+/// - Eje Y: número de piscinas (escala automática)
+/// - Barras con color primario del tema
 class _PoolsBarChart extends StatelessWidget {
   final List sessions;
 
@@ -352,6 +371,12 @@ class _PoolsBarChart extends StatelessWidget {
   }
 }
 
+// 📈 Widget de gráfica de línea (fl_chart)
+/// Muestra el progreso acumulado de piscinas en el tiempo
+/// - Línea curva con área rellena (alpha: 0.1)
+/// - Puntos con borde blanco
+/// - Tooltip muestra el acumulado en cada punto
+/// - Calcula spots sumando piscinas progresivamente
 class _ProgressLineChart extends StatelessWidget {
   final List sessions;
 
@@ -364,7 +389,8 @@ class _ProgressLineChart extends StatelessWidget {
     final dateFormat = DateFormat('dd/MM');
     final colorScheme = Theme.of(context).colorScheme;
 
-    // Calcular acumulado
+    // 📈 Calcular puntos acumulados para la gráfica
+    // Cada punto es la suma de todas las piscinas hasta ese momento
     final spots = <FlSpot>[];
     int accumulated = 0;
     for (int i = 0; i < sessions.length; i++) {
@@ -467,6 +493,9 @@ class _ProgressLineChart extends StatelessWidget {
   }
 }
 
+// 📊 Widget de fila de resumen
+/// Muestra ícono, etiqueta y valor en formato horizontal
+/// Usado en la tarjeta de resumen de estadísticas
 class _SummaryRow extends StatelessWidget {
   final String label;
   final String value;

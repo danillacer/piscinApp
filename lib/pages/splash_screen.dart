@@ -1,3 +1,14 @@
+/// 🌊 Pantalla de carga (Splash Screen)
+///
+/// Pantalla inicial que se muestra al abrir la aplicación durante 3 segundos.
+/// Características:
+/// - Degradado azul de fondo (tema piscina)
+/// - Animación de fade-in (opacidad)
+/// - Animación de scale con efecto elástico (elasticOut)
+/// - Icono de piscina con sombra
+/// - Indicador de progreso circular
+/// - Oculta barras del sistema durante la animación (modo inmersivo)
+/// - Navega automáticamente a HomePage después de 3 segundos
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,13 +28,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     
+    // 📵 Ocultar barras del sistema (modo pantalla completa)
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     
+    // 🎬 Configurar controlador de animación (2 segundos de duración)
     _controller = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
 
+    // 🌟 Animación de fade-in: 0% a 100% opacidad en primera mitad (0.0 - 0.5)
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -31,6 +45,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
 
+    // 🔍 Animación de escala: 50% a 100% con efecto elástico (0.0 - 0.7)
     _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
@@ -38,14 +53,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
 
+    // ▶️ Iniciar animación
     _controller.forward();
 
+    // ⏱️ Esperar 3 segundos y navegar a HomePage
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
+        // 📱 Restaurar barras del sistema
         SystemChrome.setEnabledSystemUIMode(
           SystemUiMode.manual,
           overlays: SystemUiOverlay.values,
         );
+        // ➡️ Navegar a HomePage (reemplaza splash en el stack)
         Navigator.of(context).pushReplacementNamed('/');
       }
     });
@@ -61,6 +80,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        // 🌈 Degradado azul temático (azul oscuro → azul claro)
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

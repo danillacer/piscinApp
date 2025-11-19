@@ -1,3 +1,15 @@
+/// 💾 Página de Exportación de Datos
+///
+/// Permite exportar datos a formato CSV (compatible con Excel, Google Sheets):
+/// - 🏊 Exportar sesiones: fecha, piscinas, metros
+/// - ✅ Exportar lista TODO: ítem, completado (Sí/No)
+///
+/// Los archivos CSV se guardan en:
+/// - Android: /storage/emulated/0/Android/data/com.example.piscinapp/files/
+/// - Formato de nombre: sesiones_piscina_YYYYMMDD_HHMMSS.csv
+///                      lista_todo_YYYYMMDD_HHMMSS.csv
+///
+/// Muestra SnackBar con la ruta completa del archivo exportado.
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +21,9 @@ import '../providers/todo_provider.dart';
 class ExportPage extends StatelessWidget {
   const ExportPage({super.key});
 
+  // 📊 Exportar sesiones a formato CSV
+  // Formato: Fecha,Piscinas,Metros
+  // Ejemplo: 19/11/2025,40,1000
   Future<String> _exportSessionsToCSV(List sessions) async {
     final dateFormat = DateFormat('dd/MM/yyyy');
     final buffer = StringBuffer();
@@ -21,7 +36,7 @@ class ExportPage extends StatelessWidget {
       buffer.writeln('${dateFormat.format(session.date)},${session.pools},${session.meters}');
     }
     
-    // Guardar archivo
+    // 💾 Guardar archivo con timestamp para evitar sobrescrituras
     final directory = await getApplicationDocumentsDirectory();
     final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
     final file = File('${directory.path}/sesiones_piscina_$timestamp.csv');
@@ -30,6 +45,10 @@ class ExportPage extends StatelessWidget {
     return file.path;
   }
 
+  // ✅ Exportar lista TODO a formato CSV
+  // Formato: Item,Completado
+  // Ejemplo: "Gafas de natación",Sí
+  // Nota: Los ítems con comas se encierran en comillas dobles
   Future<String> _exportTodosToCSV(List todos) async {
     final buffer = StringBuffer();
     
@@ -94,7 +113,8 @@ class ExportPage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               
-              // Exportar sesiones
+              // 🏊 Tarjeta de exportación de sesiones
+              // Deshabilitada si no hay sesiones
               Consumer<SessionProvider>(
                 builder: (context, provider, child) {
                   return _ExportCard(
@@ -204,6 +224,10 @@ class ExportPage extends StatelessWidget {
   }
 }
 
+// 💾 Widget de tarjeta de exportación
+/// Tarjeta interactiva con ícono, título y subtítulo
+/// Se deshabilita visualmente cuando enabled=false (sin datos para exportar)
+/// Muestra flecha indicando que es clickeable
 class _ExportCard extends StatelessWidget {
   final IconData icon;
   final String title;

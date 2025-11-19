@@ -1,3 +1,14 @@
+/// 🏊 Página de Registro de Sesiones
+///
+/// Funcionalidades:
+/// - 📝 Formulario para registrar nuevas sesiones (número de piscinas + fecha)
+/// - 📅 Selector de fecha (DatePicker) con locale español
+/// - 📊 Tarjetas de estadísticas: Total piscinas y Total metros
+/// - 📋 Historial de sesiones con fecha, piscinas y metros
+/// - 🗑️ Eliminar sesiones individuales con confirmación
+/// - ✨ Al guardar sesión, se actualiza automáticamente la racha (streak)
+///
+/// IMPORTANTE: 1 piscina = 25 metros (conversión automática)
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +32,7 @@ class _SessionsPageState extends State<SessionsPage> {
     super.dispose();
   }
 
+  // 📅 Mostrar selector de fecha (máximo fecha actual)
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -36,6 +48,9 @@ class _SessionsPageState extends State<SessionsPage> {
     }
   }
 
+  // ➕ Guardar nueva sesión
+  // Valida que el número de piscinas sea válido (> 0)
+  // Automáticamente actualiza la racha en SessionProvider
   void _addSession() {
     final pools = int.tryParse(_poolsController.text);
     if (pools != null && pools > 0) {
@@ -63,6 +78,7 @@ class _SessionsPageState extends State<SessionsPage> {
       ),
       body: Column(
         children: [
+          // 📋 Formulario de nueva sesión
           Card(
             margin: const EdgeInsets.all(16),
             child: Padding(
@@ -78,6 +94,7 @@ class _SessionsPageState extends State<SessionsPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // 🔢 Campo numérico para piscinas (solo dígitos)
                   TextField(
                     controller: _poolsController,
                     decoration: const InputDecoration(
@@ -113,6 +130,7 @@ class _SessionsPageState extends State<SessionsPage> {
               ),
             ),
           ),
+          // 📊 Tarjetas de estadísticas (Total piscinas y Total metros)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Consumer<SessionProvider>(
@@ -138,9 +156,11 @@ class _SessionsPageState extends State<SessionsPage> {
             ),
           ),
           const SizedBox(height: 16),
+          // 📜 Historial de sesiones (ordenadas cronológicamente)
           Expanded(
             child: Consumer<SessionProvider>(
               builder: (context, provider, child) {
+                // 📦 Estado vacío cuando no hay sesiones
                 if (provider.sessions.isEmpty) {
                   return const Center(
                     child: Column(
@@ -222,6 +242,9 @@ class _SessionsPageState extends State<SessionsPage> {
   }
 }
 
+// 📊 Widget de tarjeta de estadística
+/// Muestra un valor numérico con ícono y título
+/// Usa colores temáticos con transparencia (alpha: 0.1)
 class _StatCard extends StatelessWidget {
   final String title;
   final String value;

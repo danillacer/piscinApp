@@ -124,10 +124,15 @@ venv.bak/
 *.so
 *.dylib
 
-# Screenshots (descomenta cuando subas capturas)
-/docs/screenshots/*.png
-/docs/screenshots/*.jpg
-/docs/screenshots/*.gif
+# Archivos de trabajo temporal (no subir)
+CAMBIOS_REALIZADOS.md
+DOCUMENTACION_COMPLETADA.md
+docs/LISTA_SCREENSHOTS.md
+*.draft.md
+*.wip.md
+
+# Scripts de desarrollo local
+/scripts/
 
 # Export files
 /exports/

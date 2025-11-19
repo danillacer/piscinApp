@@ -1,3 +1,15 @@
+/// ✅ Página de Lista TODO (Preparar la piscina)
+///
+/// Funcionalidades:
+/// - ➕ Añadir nuevos ítems con TextField + botón
+/// - ↕️ Reordenar ítems con drag & drop (ReorderableListView)
+/// - ✔️ Marcar/desmarcar ítems como completados
+/// - ✏️ Editar ítems con doble clic
+/// - 🗑️ Eliminar ítems individuales
+/// - 📌 Chincheta: Guardar lista actual como "lista base" para restaurarla
+/// - ⚙️ Menú de opciones: marcar todos, desmarcar todos, borrar todos
+///
+/// La lista se guarda automáticamente en Hive al hacer cambios.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/todo_provider.dart';
@@ -19,6 +31,8 @@ class _TodoPageState extends State<TodoPage> {
     super.dispose();
   }
 
+  // ➕ Añadir nuevo ítem TODO
+  // Valida que el texto no esté vacío antes de añadir
   void _addTodo() {
     if (_controller.text.trim().isNotEmpty) {
       context.read<TodoProvider>().addTodo(_controller.text);
@@ -26,6 +40,8 @@ class _TodoPageState extends State<TodoPage> {
     }
   }
 
+  // 📌 Mostrar diálogo de confirmación para guardar lista base
+  // La "lista base" es la plantilla que se carga al iniciar la app
   void _showPinDialog() {
     showDialog(
       context: context,
@@ -64,6 +80,7 @@ class _TodoPageState extends State<TodoPage> {
       appBar: AppBar(
         title: const Text('Preparar la piscina'),
         actions: [
+          // 📌 Botón de chincheta (se resalta si ya hay lista base guardada)
           IconButton(
             icon: Icon(
               Icons.push_pin,
@@ -74,6 +91,7 @@ class _TodoPageState extends State<TodoPage> {
             tooltip: 'Guardar como lista base',
             onPressed: _showPinDialog,
           ),
+          // ⚙️ Menú de opciones masivas
           PopupMenuButton<String>(
             onSelected: (value) async {
               final provider = context.read<TodoProvider>();
@@ -126,6 +144,7 @@ class _TodoPageState extends State<TodoPage> {
       ),
       body: Column(
         children: [
+          // ✏️ Campo de entrada para nuevos ítems
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -153,6 +172,7 @@ class _TodoPageState extends State<TodoPage> {
           Expanded(
             child: Consumer<TodoProvider>(
               builder: (context, provider, child) {
+                // 📦 Estado vacío: mostrar mensaje cuando no hay ítems
                 if (provider.todos.isEmpty) {
                   return const Center(
                     child: Column(
@@ -176,6 +196,8 @@ class _TodoPageState extends State<TodoPage> {
                   );
                 }
 
+                // ↕️ Lista reordenable con drag & drop
+                // Cada ítem tiene un handle para arrastrar y reordenar
                 return ReorderableListView.builder(
                   itemCount: provider.todos.length,
                   onReorder: (oldIndex, newIndex) {

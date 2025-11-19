@@ -1,3 +1,14 @@
+/// 🏠 Página de Inicio (Dashboard)
+///
+/// Esta es la pantalla principal de la aplicación que muestra:
+/// - Tarjeta de bienvenida con icono de piscina
+/// - Grid de 4 tarjetas de navegación (Preparar, Sesiones, Estadísticas, Exportar)
+/// - Tarjeta de racha actual con ícono de fuego
+/// - Tarjeta de objetivo semanal con barra de progreso
+/// - Resumen rápido con ítems TODO, sesiones y metros totales
+///
+/// Usa SingleChildScrollView para evitar overflow cuando las tarjetas
+/// de racha/objetivo ocupan mucho espacio vertical.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/session_provider.dart';
@@ -6,6 +17,8 @@ import '../providers/todo_provider.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  // 🎯 Mostrar diálogo para editar objetivo semanal
+  // Permite al usuario cambiar su meta de piscinas por semana
   void _showGoalDialog(BuildContext context, SessionProvider provider) {
     final controller = TextEditingController(
       text: provider.getWeeklyGoal().toString(),
@@ -59,7 +72,8 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Header
+              // 📋 Header de bienvenida
+              // Tarjeta destacada con color primario del tema
               Card(
                 color: colorScheme.primaryContainer,
                 child: Padding(
@@ -93,7 +107,8 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               
-              // Opciones principales
+              // 🎴 Grid de navegación principal (2 columnas x 2 filas)
+              // Cada tarjeta navega a una sección diferente de la app
               GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -134,7 +149,8 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               
-              // Estadísticas de racha y objetivo
+              // 🔥 Sección de racha y objetivo semanal
+              // Consume SessionProvider para mostrar estadísticas en tiempo real
               Consumer<SessionProvider>(
                 builder: (context, sessionProvider, child) {
                   final weeklyGoal = sessionProvider.getWeeklyGoal();
@@ -143,7 +159,7 @@ class HomePage extends StatelessWidget {
                   
                   return Column(
                     children: [
-                      // Racha
+                      // 🔥 Tarjeta de racha actual (días consecutivos)
                       Card(
                         color: Colors.orange.shade50,
                         child: Padding(
@@ -211,7 +227,8 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       
-                      // Objetivo semanal
+                      // 🎯 Tarjeta de objetivo semanal con barra de progreso
+                      // Toca el ícono de editar para cambiar el objetivo
                       Card(
                         color: Colors.green.shade50,
                         child: Padding(
@@ -288,7 +305,8 @@ class HomePage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               
-              // Resumen rápido
+              // 📊 Resumen rápido con 3 estadísticas principales
+              // Consume ambos providers para mostrar información actualizada
               Consumer2<TodoProvider, SessionProvider>(
                 builder: (context, todoProvider, sessionProvider, child) {
                   return Card(
@@ -327,6 +345,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
+// 🎴 Widget de tarjeta de menú (usada en el grid de navegación)
+/// Tarjeta con ícono, título, subtítulo y acción al tocar
+/// Cada tarjeta tiene un color temático y navega a una ruta específica
 class _MenuCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -385,6 +406,9 @@ class _MenuCard extends StatelessWidget {
   }
 }
 
+// 📊 Widget de estadística rápida (usada en el resumen inferior)
+/// Muestra un ícono, valor numérico y etiqueta en formato compacto
+/// Ejemplos: "5 Ítems", "12 Sesiones", "300m Total"
 class _QuickStat extends StatelessWidget {
   final IconData icon;
   final String value;

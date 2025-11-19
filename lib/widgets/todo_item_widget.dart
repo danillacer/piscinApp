@@ -1,3 +1,14 @@
+/// 📝 Widget de Ítem TODO con edición inline
+///
+/// Funcionalidades:
+/// - ↕️ Drag handle para reordenar con ReorderableListView
+/// - ✔️ Checkbox para marcar/desmarcar como completado
+/// - 👆 Doble clic en el texto para entrar en modo edición
+/// - ✏️ Modo edición: TextField con botones de confirmar/cancelar
+/// - 🗑️ Botón de eliminar (rojo)
+/// - 👁️ Tachado automático para ítems completados
+///
+/// El widget es Stateful para manejar el estado de edición localmente.
 import 'package:flutter/material.dart';
 import '../models/todo_item.dart';
 
@@ -37,12 +48,15 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
     super.dispose();
   }
 
+  // ✏️ Activar modo edición (se activa con doble clic)
   void _startEditing() {
     setState(() {
       _isEditing = true;
     });
   }
 
+  // ✔️ Finalizar edición y guardar cambios
+  // Si el texto está vacío, restaura el valor original
   void _finishEditing() {
     if (_controller.text.trim().isNotEmpty) {
       widget.onEdit(_controller.text);
@@ -59,9 +73,11 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ListTile(
+        // ↕️ Leading: Drag handle + Checkbox
         leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Handle para arrastrar y reordenar
             ReorderableDragStartListener(
               index: widget.index,
               child: const Icon(
@@ -76,6 +92,7 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
             ),
           ],
         ),
+        // 📝 Título: TextField en modo edición, Text con doble clic en modo normal
         title: _isEditing
             ? TextField(
                 controller: _controller,
@@ -98,14 +115,17 @@ class _TodoItemWidgetState extends State<TodoItemWidget> {
                   ),
                 ),
               ),
+        // ⚙️ Trailing: Botones de confirmar/cancelar en edición, botón de eliminar en normal
         trailing: _isEditing
             ? Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // ✔️ Confirmar edición
                   IconButton(
                     icon: const Icon(Icons.check, color: Colors.green),
                     onPressed: _finishEditing,
                   ),
+                  // ❌ Cancelar edición
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.grey),
                     onPressed: () {
